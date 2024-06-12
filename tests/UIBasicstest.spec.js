@@ -28,6 +28,7 @@ test('Second Test', async ({ page }) => {
   console.log(allTitles);
 });
 
+
 test('Register test ', async({page})=>{
   await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=common/home');
   await page.getByText('My Account').first().click();
@@ -39,8 +40,8 @@ test('Register test ', async({page})=>{
   await page.locator('[name="password"]').fill('123456');
   await page.locator('[name="confirm"]').fill('123456')
   await page.locator('[type="submit"]').click();
-
 });
+
 
 test('Login test', async({page})=>{
   await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=common/home');
@@ -49,10 +50,10 @@ test('Login test', async({page})=>{
   await page.locator('[name="email"]').fill('demo@gmail.com');
   await page.locator('[type="password"]').fill('123456');
   await page.locator('[type="submit"]').click();
-
 });
 
-test.only('Shopping test', async({page})=>{
+
+test('Shopping test', async({page})=>{
   await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
   await page.locator('[name="username"]').fill('demo@gmail.com');
   await page.locator('[type="password"]').fill('111111');
@@ -60,9 +61,4 @@ test.only('Shopping test', async({page})=>{
   await page.locator('.radiotextsty').last().click();
   await page.locator('#okayBtn').click();
   //assertion
-
-
-  await page.pause();
-
-
 });

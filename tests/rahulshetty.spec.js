@@ -40,7 +40,7 @@ test('Iphone shop', async ({ page })=>{
     await page.locator('text=Checkout').click();
     await expect(page.locator('text=Nokia Edge')).toBeTruthy();
 
-})
+});
 
 test('GreenKart', async ({ page }) => {
     const productName = 'Cucumber - 1 Kg';
@@ -79,4 +79,4 @@ test('Naveenlabs register', async ({page})=>{
     await page.locator('label:has-text("Yes")').click();
     await page.locator('[name="agree"]').check();
 
-})
+});
