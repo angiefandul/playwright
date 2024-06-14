@@ -1,40 +1,53 @@
 const { test, expect } = require('@playwright/test');
+const {LoginPage} = require('../../../page-objects/LoginPage');
+const { loginData }  = require('../../../utils/testData');
+
+
 
 test.beforeEach(async ({ page }) => {
-    await page.goto('https://login.pultemortgage.com/login');
+    const loginPage = new LoginPage(page);
+    loginPage.goTo();
 });
 
+
 test('Login with Incorrect Password', async ({ page }) => {
-    await page.getByRole('textbox', { name: 'Username' }).fill('katerina.porter@gmail.com');
-    await page.getByRole('textbox', { name: 'Password' }).fill('wrongpassword');
-    await page.getByRole('button', { name: 'Log In' }).click();
+    const loginPage = new LoginPage(page);
+    const { username, password, invalidpassword, invalidusername } = loginData;
+
+    await loginPage.userName.fill(username);
+    await loginPage.password.fill(invalidpassword);
+    await loginPage.signInbutton.click();
     await expect(page.locator('.form-result-message.failure')).toHaveText('Invalid credentials provided.');
 });
 
+
 test('Login with Empty Fields', async ({ page }) => {
-    await page.getByRole('button', { name: 'Log In' }).click();
+    const loginPage = new LoginPage(page);
+
+    await loginPage.signInbutton.click();
     await expect(page.locator('.form-result-message.failure')).toHaveText('Please enter a username');
 });
 
+
 test('Login with Incorrect Username', async ({ page }) => {
-    await page.getByRole('textbox', { name: 'Username' }).fill('incorrect.username@gmail.com');
-    await page.getByRole('textbox', { name: 'Password' }).fill('12345678kat');
-    await page.getByRole('button', { name: 'Log In' }).click();
+    const loginPage = new LoginPage(page);
+    const { username, password, invalidpassword, invalidusername } = loginData;
+
+    await loginPage.userName.fill(invalidusername);
+    await loginPage.password.fill(password);
+    await loginPage.signInbutton.click();
     await expect(page.locator('.form-result-message.failure')).toHaveText('Invalid credentials provided.');
 });
+
 
 test('Login with Unchecked Remember Me', async ({ page }) => {
-    await page.getByRole('textbox', { name: 'Username' }).fill('katerina.porter@gmail.com');
-    await page.getByRole('textbox', { name: 'Password' }).fill('12345678kat');
-    await page.getByRole('button', { name: 'Log In' }).click();
+    const loginPage = new LoginPage(page);
+    const { username, password, invalidpassword, invalidusername } = loginData;
+
+    await loginPage.userName.fill(username);
+    await loginPage.password.fill(password);
+    await loginPage.signInbutton.click();
     // Verify successful login without remembering the user
-    await expect(page.locator('.form-result-message.failure')).toBeVisible();
-    // Further checks might include ensuring cookies/local storage do not have 'remember me' settings
+    await expect(page.locator('.form-result-message.failure')).toBeVisible();   
 });
 
-test('Login with Partially Correct Credentials', async ({ page }) => {
-    await page.getByRole('textbox', { name: 'Username' }).fill('katerina.porter@gmail.com');
-    await page.getByRole('textbox', { name: 'Password' }).fill('wrongpassword');
-    await page.getByRole('button', { name: 'Log In' }).click();
-    await expect(page.locator('.form-result-message.failure')).toHaveText('Invalid credentials provided.');
-});

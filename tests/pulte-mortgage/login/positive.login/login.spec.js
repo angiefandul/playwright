@@ -1,39 +1,54 @@
 const { test, expect } = require('@playwright/test'); 
+const {LoginPage} = require('../../../page-objects/LoginPage');
+const { loginData }  = require('../../../utils/testData');
+
 
 test.beforeEach(async ({ page }) => {
-    await page.goto('https://login.pultemortgage.com/login');
-    
-    
+    // await page.goto('https://login.pultemortgage.com/login');  
+    const loginPage = new LoginPage(page);
+    loginPage.goTo(); 
 });
+
 
 test('Verifying login functionality', async ({ page })=> {
-    await page.getByRole('textbox', { name: 'Username' }).fill('katerina.porter@gmail.com');
-    await expect(page.getByRole('textbox', { name: 'Username' })).toHaveValue('katerina.porter@gmail.com');
+    const loginPage = new LoginPage(page);
+    const { username, password } = loginData;
+    loginPage.validLogin(username, password);
 
-    await page.getByRole('textbox', { name: 'Password' }).fill('12345678kat');
-    await expect(page.getByRole('textbox', { name: 'Password' })).toHaveValue('12345678kat');
-    await page.locator('#chkrememberMe').check();
-    await expect(page.locator('#chkrememberMe')).toBeChecked();
-    //await page.getByRole('button', { name: 'Log In'}).click();
-     
+    await expect(loginPage.userName).toHaveValue(username);
+    await expect(loginPage.password).toHaveValue(password);
+    await expect(loginPage.checkMe).toBeChecked(); 
 });
+
 
 test('Remember Me Checkbox Checked', async ({ page }) => {
-    await page.locator('#chkrememberMe').check();
-    await expect(page.locator('#chkrememberMe')).toBeChecked();
+    const loginPage = new LoginPage(page);
+
+    await loginPage.checkMe.check();
+    await expect(loginPage.checkMe).toBeChecked();
 });
+
 
 test('Correct Username Entry', async ({ page }) => {
-    await page.getByRole('textbox', { name: 'Username' }).fill('katerina.porter@gmail.com');
-    await expect(page.getByRole('textbox', { name: 'Username' })).toHaveValue('katerina.porter@gmail.com');
+    const loginPage = new LoginPage(page);
+    const { username, password } = loginData;
+
+    await loginPage.userName.fill(username);
+    await expect(loginPage.userName).toHaveValue(username);
 });
+
 
 test('Correct Password Entry', async ({ page }) => {
-    await page.getByRole('textbox', { name: 'Password' }).fill('12345678kat');
-    await expect(page.getByRole('textbox', { name: 'Password' })).toHaveValue('12345678kat');
+    const loginPage = new LoginPage(page);
+    const { username, password } = loginData;
+
+    await loginPage.password.fill(password);
+    await expect(loginPage.password).toHaveValue(password);
 });
 
+
 test('Login Button Click', async ({ page }) => {
-    await page.getByRole('button', { name: 'Log In' }).click();
-    // Check for a response to the login attempt (e.g., error message or success)
+    const loginPage = new LoginPage(page);
+
+    await loginPage.signInbutton.click();
 });

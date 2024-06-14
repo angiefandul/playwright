@@ -1,97 +1,99 @@
 const { test, expect } = require('@playwright/test'); 
+const { RegistrationPage } = require('../../../page-objects/RegistrationPage');
+const { registrationData }  = require('../../../utils/testData');
+
+
 
 test.beforeEach(async ({ page }) => {
-       await page.goto('https://login.pultemortgage.com');
-       await page.mouse.down();
-       await page.locator('a.listitem').filter({ hasText: 'Register'}).click();
-       await page.getByLabel('Yes').click();
-      });
+    const registrationPage = new RegistrationPage(page);
+    registrationPage.goTo();
+    });
 
 
 test('Verify Successful Registration e2e', async ({ page }) => {
-    await page.locator('#firstName').fill('Katerina');
-    await expect(page.locator('#firstName')).toHaveValue('Katerina');
-    await page.locator('#middleInitial').fill('O');
-    await expect(page.locator('#middleInitial')).toHaveValue('O')
-    await page.locator('#lastName').fill('Porter');
-    //Date of birth
-    
 
-    await page.locator('#emailAddress').fill('katerina.porter@gmail.com');
-    await page.locator('#confirmEmailAddress').fill('katerina.porter@gmail.com');
-    await page.locator('#newPassword').fill('12345678kat');
-    await page.locator('#confirmPassword').fill('12345678kat');
-    await page.locator('[role="checkbox"]').click();
+    const registrationPage = new RegistrationPage(page);
+    const { firstname, middleinitial, lastname, username, password } = registrationData;
+
+    registrationPage.validRegistration(firstname, username, middleinitial, lastname, password);
+    await expect(registrationPage.firstName).toHaveValue(firstname);
+    await expect(registrationPage.middleInitial).toHaveValue(middleinitial)
+    
     const checkbox = page.locator('[role="checkbox"]');
     await expect(checkbox).toBeChecked;
 
     //await page.getByRole('button', { name: 'Register now'}).click();
-     //await expect(page.locator('.success-message')).toBeVisible();
-
+    //await expect(page.locator('.success-message')).toBeVisible();
 });
 
 test('Navigate to Register Page', async ({ page }) => {
+    const registrationPage = new RegistrationPage(page);
     await expect(page).toHaveURL(/registernow/);
     
 });
 
 
-test('Agree to Terms', async ({ page }) => {
-    await expect(page.getByLabel).toBeTruthy;
+test('Success message on your UC', async ({ page }) => {
+    const registrationPage = new RegistrationPage(page);
+    const { firstname, middleinitial, lastname, username, password } = registrationData;
 
+    await expect(page.locator('strong').last()).toHaveText('Congratulations on being under contract with your new home!');
 });
 
+
 test('Fill out Registration Form with Valid Data', async ({ page }) => {
-    await page.locator('#firstName').fill('Katerina');
-    await expect(page.locator('#firstName')).toHaveValue('Katerina');
+    const registrationPage = new RegistrationPage(page);
+    const { firstname, middleinitial, lastname, username, password } = registrationData;
 
-    await page.locator('#middleInitial').fill('O');
-    await expect(page.locator('#middleInitial')).toHaveValue('O')
+    await registrationPage.firstName.fill(firstname);
+    await expect(registrationPage.firstName).toHaveValue(firstname);
 
-    await page.locator('#lastName').fill('Porter');
-    await expect(page.locator('#lastName')).toHaveValue('Porter');
+    await registrationPage.middleInitial.fill(middleinitial);
+    await expect(registrationPage.middleInitial).toHaveValue(middleinitial)
 
-    await page.locator('#emailAddress').fill('katerina.porter@gmail.com');
-    await expect(page.locator('#emailAddress')).toHaveValue('katerina.porter@gmail.com');
+    await registrationPage.lastName.fill(lastname);
+    await expect(registrationPage.lastName).toHaveValue(lastname);
 
-    await page.locator('#confirmEmailAddress').fill('katerina.porter@gmail.com');
+    await registrationPage.emailAddress.fill(username);
+    await expect(registrationPage.emailAddress).toHaveValue(username);
 
-    await page.locator('#newPassword').fill('12345678kat');
-    await expect(page.locator('#newPassword')).toHaveValue('12345678kat');
+    await registrationPage.confirmEmail.fill(username);
 
-    await page.locator('#confirmPassword').fill('12345678kat');
+    await registrationPage.newPassword.fill(password);
+    await expect(registrationPage.newPassword).toHaveValue(password);
+
+    await registrationPage.confirmPassword.fill(password);
 });
 
 
 test('Check I Agree Checkbox', async ({ page })=> {
-    const checkbox = page.locator('[role="checkbox"]');
-    await checkbox.click();
-    // Wait for a brief moment to ensure the state is updated
-    await page.waitForTimeout(500);
-    // Assert that the checkbox is checked
-    //await expect(checkbox).toBeChecked();
+    const registrationPage = new RegistrationPage(page);
+
+    await registrationPage.checkBox.click();
+    await page.waitForLoadState();
+    //await expect(registrationPage.checkBox).toBeChecked();
 });
 
 
 test('Submit Registration form', async ({ page }) => {
-    await page.locator('#firstName').fill('Katerina');
-    await expect(page.locator('#firstName')).toHaveValue('Katerina');
-    await page.locator('#middleInitial').fill('O');
-    await expect(page.locator('#middleInitial')).toHaveValue('O')
-    await page.locator('#lastName').fill('Porter');
+    const registrationPage = new RegistrationPage(page);
+    const { firstname, middleinitial, lastname, username, password } = registrationData;
+
+    await registrationPage.firstName.fill(firstname);
+    await expect(registrationPage.firstName).toHaveValue(firstname);
+    await registrationPage.middleInitial.fill(middleinitial);
+    await expect(registrationPage.middleInitial).toHaveValue(middleinitial)
+    await registrationPage.lastName.fill(lastname);
     //Date of birth
     
-
-    await page.locator('#emailAddress').fill('katerina.porter@gmail.com');
-    await page.locator('#confirmEmailAddress').fill('katerina.porter@gmail.com');
-    await page.locator('#newPassword').fill('12345678kat');
-    await page.locator('#confirmPassword').fill('12345678kat');
-    await page.locator('[role="checkbox"]').click();
-    const checkbox = page.locator('[role="checkbox"]');
-    await expect(checkbox).toBeChecked;
+    await registrationPage.emailAddress.fill(username);
+    await registrationPage.confirmEmail.fill(username);
+    await registrationPage.newPassword.fill(password);
+    await registrationPage.confirmPassword.fill(password);
+    await registrationPage.checkBox.click();
+    await expect(registrationPage.checkBox).toBeChecked;
 
     //expect(response.status()).toBe(200);
-
 });
 
 

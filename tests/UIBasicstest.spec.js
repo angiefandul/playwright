@@ -62,3 +62,34 @@ test('Shopping test', async({page})=>{
   await page.locator('#okayBtn').click();
   //assertion
 });
+
+
+test.describe('test suite 1', ()=> {
+  test('the first test', () => {
+
+  })
+
+  test('the second test', () => {
+
+  })
+
+  test('the third test', () => {
+
+  })
+
+});
+
+test.describe('test suite 2', ()=> {
+  test('the first test', () => {
+
+  })
+
+  test('the second test', () => {
+
+  })
+
+  test('the third test', () => {
+
+  })
+
+})
