@@ -1,7 +1,6 @@
-const { test, expect } = require('@playwright/test'); 
 
 
-class RegistrationPage 
+export class RegistrationPage 
 {
 
 constructor(page)
@@ -47,4 +46,4 @@ async validRegistration(firstname, username, middleinitial, lastname, password) 
 
 }
 
-module.exports = {RegistrationPage};
+export default RegistrationPage;

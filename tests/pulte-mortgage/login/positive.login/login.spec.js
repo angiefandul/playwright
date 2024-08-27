@@ -1,6 +1,6 @@
-const { test, expect } = require('@playwright/test'); 
-const {LoginPage} = require('../../../page-objects/LoginPage');
-const { loginData }  = require('../../../utils/testData');
+import { test, expect } from '@playwright/test'; 
+import {LoginPage} from '../../../page-objects/LoginPage';
+import { loginData }  from '../../../utils/testData';
 
 
 test.beforeEach(async ({ page }) => {

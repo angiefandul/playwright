@@ -1,6 +1,5 @@
-const { test, expect } = require('@playwright/test'); 
 
-class LoginPage 
+export class LoginPage 
 {
 
 constructor(page)
@@ -29,4 +28,4 @@ async validLogin(username, password) {
 
 }
 
-module.exports = {LoginPage};
+export default LoginPage;

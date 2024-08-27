@@ -1,6 +1,6 @@
-const { test, expect } = require('@playwright/test'); 
-const { RegistrationPage } = require('../../../page-objects/RegistrationPage');
-const { registrationData }  = require('../../../utils/testData');
+import { test, expect } from '@playwright/test'; 
+import { RegistrationPage } from '../../../page-objects/RegistrationPage';
+import { registrationData }  from '../../../utils/testData';
 
 
 
